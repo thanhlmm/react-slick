@@ -78,6 +78,10 @@ export class InnerSlider extends React.Component {
       this.lazyLoadTimer = setInterval(this.progressiveLazyLoad, 1000);
     }
     this.ro = new ResizeObserver(() => {
+      // Prevent flick layout when element styles change from display: none to visible
+      if (entries && entries[0] && entries[0].contentRect.width < 10) {
+        return;
+      }
       if (this.state.animating) {
         this.onWindowResized(false); // don't set trackStyle hence don't break animation
         this.callbackTimers.push(
